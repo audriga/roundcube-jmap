@@ -1,0 +1,34 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Test Contact;One;;M.Sc.;testsuffix
+FN:testemailaddress@example.com
+NICKNAME:OTC
+BDAY;VALUE=date:1990-02-12
+X-ANNIVERSARY;VALUE=date:2015-11-15
+TITLE:Software Engineer
+ORG:Test Inc.
+X-DEPARTMENT:IT
+NOTE:Test notes about a test contact...
+EMAIL;TYPE=INTERNET;TYPE=HOME:testemailaddress@example.com
+EMAIL;TYPE=INTERNET;TYPE=OTHER:miscmail@miscmail.com
+TEL;TYPE=home:555123789
+TEL;TYPE=home:555123789
+TEL;TYPE=home:555123789
+TEL;TYPE=home:555123789
+TEL;TYPE=home:555123789
+TEL;TYPE=home:555123789
+TEL;TYPE=home:555123789
+TEL;TYPE=home:555123789
+TEL;TYPE=CELL:0123 456 789
+TEL;TYPE=CELL:0123 456 789
+TEL;TYPE=CELL:0123 456 789
+TEL;TYPE=CELL:0123 456 789
+TEL;TYPE=workfax:00 98765
+TEL;TYPE=pager:00 111 222 333
+TEL;TYPE=pager:00 111 222 333
+URL;TYPE=other:examplepersonalsite.com
+ADR;TYPE=home:;;Example Street 1;Example locality;Example region;Example pos
+ tcode;Example country
+ADR;TYPE=work:;;Work street 52;business district;test work region;12365;some
+ where
+END:VCARD

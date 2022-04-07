@@ -1,0 +1,13 @@
+<phpunit
+    bootstrap="../vendor/autoload.php"
+    colors="true"
+    cacheResultFile=".phpunit.result.cache"
+    convertErrorsToExceptions="false"
+    convertNoticesToExceptions="false"
+    convertWarningsToExceptions="false">
+    <testsuites>
+        <testsuite name="JMAP-Roundcube Unit Tests">
+            <directory>unit</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

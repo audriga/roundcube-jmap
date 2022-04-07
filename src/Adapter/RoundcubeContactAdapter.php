@@ -2,12 +2,14 @@
 
 namespace OpenXPort\Adapter;
 
-use Jmap\Contact\ContactInformation;
-use Jmap\Contact\Address;
+use OpenXPort\Jmap\Contact\ContactInformation;
+use OpenXPort\Jmap\Contact\Address;
+use OpenXPort\Jmap\Contact\File;
+use JeroenDesloovere\VCard\VCard;
+use JeroenDesloovere\VCard\VCardParser;
 
 class RoundcubeContactAdapter extends AbstractAdapter
 {
-
     private $contact;
 
     public function getContact()
@@ -22,6 +24,11 @@ class RoundcubeContactAdapter extends AbstractAdapter
     public function setContact($contact)
     {
         $this->contact = $contact;
+    }
+
+    public function getId()
+    {
+        return $this->contact['ID'];
     }
 
     public function getFirstName()
@@ -749,5 +756,79 @@ class RoundcubeContactAdapter extends AbstractAdapter
         $this->contact['address:home'] = $homeAddresses;
         $this->contact['address:work'] = $workAddresses;
         $this->contact['address:other'] = $otherAddresses;
+    }
+
+    public function getMiddlename()
+    {
+        return $this->contact['middlename'];
+    }
+
+    public function getDisplayname()
+    {
+        return $this->contact['name'];
+    }
+
+    public function getMaidenname()
+    {
+        return $this->contact['maidenname'][0];
+    }
+
+    public function getGender()
+    {
+        return $this->contact['gender'][0];
+    }
+
+    public function getRelatedTo()
+    {
+        $jmapRelatedTo = [];
+
+        $manager = $this->contact['manager'][0];
+        $assistant = $this->contact['assistant'][0];
+        $spouse = $this->contact['spouse'][0];
+
+        if (isset($manager)) {
+            $jmapRelatedTo["$manager"] = array("relation" => array("manager" => true));
+        }
+
+        if (isset($assistant)) {
+            $jmapRelatedTo["$assistant"] = array("relation" => array("assistant" => true));
+        }
+
+        if (isset($spouse)) {
+            $jmapRelatedTo["$spouse"] = array("relation" => array("spouse" => true));
+        }
+
+        return $jmapRelatedTo;
+    }
+
+    public function getRole()
+    {
+        // TODO: Implement me (currently no 'role' property in Roundcube)
+    }
+
+    public function getAvatar()
+    {
+        // Use vCard lib to read base64 value of the contact image
+        $vCardString = $this->contact['vcard'];
+        $parser = new VCardParser($vCardString);
+        $vCard = $parser->getCardAtIndex(0);
+
+        $jmapAvatar = null;
+
+        /**
+         * The 'rawPhoto' property of the parsed vCard holds the image data.
+         * However, the vCard lib doesn't put a base64-encoded value there,
+         * but rather the binary value of the image that was base64-encoded in the vCard string.
+         * That's why we call `base64_encode` on the binary value in this propery,
+         * in order to get a base64 value.
+         */
+        if (isset($vCard->rawPhoto)) {
+            $base64Avatar = base64_encode($vCard->rawPhoto);
+            $jmapAvatar = new File();
+            $jmapAvatar->setBase64($base64Avatar);
+        }
+
+
+        return $jmapAvatar;
     }
 }

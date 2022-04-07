@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Test Contact;One;;M.Sc.;testsuffix
+FN:testemailaddress@example.com
+NICKNAME:OTC
+BDAY;VALUE=date:1990-02-12
+X-ANNIVERSARY;VALUE=date:2015-11-15
+TITLE:Software\, Engineer
+ORG:Test Inc.
+X-DEPARTMENT:IT
+NOTE:Test notes about a test contact...\; and some special chars...
+END:VCARD

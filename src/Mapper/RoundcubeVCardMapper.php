@@ -4,35 +4,38 @@ namespace OpenXPort\Mapper;
 
 use OpenXPort\Jmap\Contact\Contact;
 
-class RoundcubeContactMapper extends AbstractMapper
+class RoundcubeVCardMapper extends VCardMapper
 {
     public function mapFromJmap($jmapData, $adapter)
     {
         $map = [];
 
-        foreach ($jmapData as $contact) {
-            // TODO weird way of initializing
-            $adapter->setContact([]);
+        foreach ($jmapData as $creationId => $contact) {
+            $adapter->setName(
+                $contact->lastName,
+                $contact->firstName,
+                $contact->middlename,
+                $contact->prefix,
+                $contact->suffix
+            );
+            $adapter->setNickname($contact->nickname);
+            $adapter->setBirthday($contact->birthday);
+            $adapter->setAnniversary($contact->anniversary);
+            $adapter->setJobTitle($contact->jobTitle);
+            $adapter->setOrganization($contact->company);
+            $adapter->setDepartment($contact->department);
+            $adapter->setNotes($contact->notes);
+            $adapter->setEmails($contact->emails);
+            $adapter->setPhones($contact->phones);
+            $adapter->setWebsites($contact->online);
+            $adapter->setIm($contact->online);
+            $adapter->setAddresses($contact->addresses);
 
-            $contactToCreate = reset($contact);
-            $creationId = key($jmapData);
-
-            $adapter->setFirstName($contactToCreate->firstName);
-            $adapter->setLastName($contactToCreate->lastName);
-            $adapter->setPrefix($contactToCreate->prefix);
-            $adapter->setSuffix($contactToCreate->suffix);
-            $adapter->setNickname($contactToCreate->nickname);
-            $adapter->setBirthday($contactToCreate->birthday);
-            $adapter->setAnniversary($contactToCreate->anniversary);
-            $adapter->setJobTitle($contactToCreate->jobTitle);
-            $adapter->setOrganization($contactToCreate->company);
-            $adapter->setDepartment($contactToCreate->department);
-            $adapter->setNotes($contactToCreate->notes);
-            $adapter->setEmails($contactToCreate->emails);
-            $adapter->setPhones($contactToCreate->phones);
-            $adapter->setWebsites($contactToCreate->online);
-            $adapter->setIm($contactToCreate->online);
-            $adapter->setAddresses($contactToCreate->addresses);
+            $adapter->setDisplayname($contact->displayname);
+            $adapter->setMaidenname($contact->maidenname);
+            $adapter->setGender($contact->gender);
+            $adapter->setRelatedTo($contact->relatedTo);
+            $adapter->setAvatar($contact->avatar);
 
             array_push($map, array($creationId => $adapter->getContact()));
         }
@@ -44,12 +47,12 @@ class RoundcubeContactMapper extends AbstractMapper
     {
         $list = [];
 
-        foreach ($data->records as $c) {
-            $adapter->setContact($c);
+        foreach ($data as $contactId => $contactVCard) {
+            $adapter->setContact($contactVCard);
 
             $jc = new Contact();
 
-            $jc->setId($adapter->getId());
+            $jc->setId($contactId);
             $jc->setFirstName($adapter->getFirstName());
             $jc->setLastName($adapter->getLastName());
             $jc->setPrefix($adapter->getPrefix());
@@ -75,7 +78,8 @@ class RoundcubeContactMapper extends AbstractMapper
 
             $jmapWebsites = $adapter->getWebsites();
             $jmapIms = $adapter->getIm();
-            $jmapOnline = array_merge($jmapWebsites, $jmapIms);
+
+            $jmapOnline = array_merge((array) $jmapWebsites, (array) $jmapIms);
 
             $jc->setOnline($jmapOnline);
 

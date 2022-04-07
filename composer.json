@@ -1,8 +1,8 @@
 {
     "name": "audriga/jmap-roundcube",
     "description": "JMAP support for Roundcube",
-    "version": "0.0.1",
     "type": "project",
+    "version": "1.2.1",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -14,8 +14,16 @@
             "email": "joris@audriga.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "artifact",
+            "url": "/tmp/openxport_archives/"
+        }
+    ],
     "require": {
-        "audriga/jmap-openxport": "0.0.1"
+        "php": ">=5.6.0",
+        "audriga/jmap-openxport": "~1",
+        "audriga/jmap-icalendar_vcard": ">=0.0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
@@ -23,5 +31,9 @@
     },
     "autoload": {
         "classmap": ["src/"]
+    },
+    "archive": {
+        "name": "jmap-roundcube",
+        "exclude": ["/tests", "/build", "/README.md"]
     }
 }
