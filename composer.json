@@ -2,7 +2,6 @@
     "name": "audriga/jmap-roundcube",
     "description": "JMAP support for Roundcube",
     "type": "project",
-    "version": "1.2.1",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -12,12 +11,6 @@
         {
             "name": "Joris Baum",
             "email": "joris@audriga.com"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "artifact",
-            "url": "/tmp/openxport_archives/"
         }
     ],
     "require": {
