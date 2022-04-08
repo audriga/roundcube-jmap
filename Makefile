@@ -3,7 +3,9 @@ project := $(OPENXPORT_PROJECT)
 build_tools_directory=build/tools
 composer=$(shell ls $(build_tools_directory)/composer_fresh.phar 2> /dev/null)
 composer_lts=$(shell ls $(build_tools_directory)/composer_lts.phar 2> /dev/null)
-version=$(shell cat composer.json | jq .version -r)
+version=$(shell git tag --sort=committerdate | tail -1)
+
+all: init
 
 # Remove all temporary build files
 .PHONY: clean
@@ -43,7 +45,6 @@ init: composer
 .PHONY: update
 update:
 	git submodule update --init --recursive
-	rm -r vendor/audriga || true
 	php $(build_tools_directory)/composer.phar update --prefer-dist
 
 # Switch to PHP 5.6 mode. In case you need to build for PHP 5.6
@@ -54,7 +55,7 @@ php56_mode: composer_lts
 	git checkout composer.json composer.lock
 	rm $(build_tools_directory)/composer.phar
 	ln $(build_tools_directory)/composer_lts.phar $(build_tools_directory)/composer.phar
-	php $(build_tools_directory)/composer.phar install --prefer-dist --no-dev
+	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 	podman run --rm --name php56 -v "$(PWD)":"$(PWD)" -w "$(PWD)" docker.io/phpdockerio/php56-cli sh -c "! (find . -type f -name \"*.php\" -not -path \"./tests/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")"
 
@@ -66,7 +67,7 @@ php70_mode: composer_lts
 	git checkout composer.json composer.lock
 	rm $(build_tools_directory)/composer.phar || true
 	ln $(build_tools_directory)/composer_lts.phar $(build_tools_directory)/composer.phar
-	php $(build_tools_directory)/composer.phar install --prefer-dist --no-dev
+	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 	# Lint for PHP 7.0
 	podman run --rm --name php70  -v "$(PWD)":"$(PWD)" -w "$(PWD)" docker.io/jetpulp/php70-cli sh -c "! (find . -type f -name \"*.php\" -not -path \"./tests/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")"
@@ -79,7 +80,7 @@ php81_mode: composer
 	git checkout composer.json composer.lock
 	rm $(build_tools_directory)/composer.phar || true
 	ln $(build_tools_directory)/composer_fresh.phar $(build_tools_directory)/composer.phar
-	php $(build_tools_directory)/composer.phar install --prefer-dist --no-dev
+	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 	# Lint for installed PHP version (should be 8.1)
 	sh -c "! (find . -type f -name \"*.php\" -not -path \"./build/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")" || true
@@ -90,6 +91,7 @@ php81_mode: composer
 graylog_php56_mode:
 	make php56_mode
 	php $(build_tools_directory)/composer.phar require paragonie/constant_time_encoding:'<2' psr/log:'<2'
+	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 # Switch to Graylog PHP 7 mode. In case you need to build for PHP 7 and include graylog
 # WARNING this will change the composer.json file
@@ -97,6 +99,7 @@ graylog_php56_mode:
 graylog_php70_mode:
 	make php70_mode
 	php $(build_tools_directory)/composer.phar require psr/log:'<2'
+	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 # Switch to Graylog PHP 8.1 mode. In case you need to build for PHP 8.1 and include graylog
 # WARNING this will change the composer.json file
@@ -104,6 +107,7 @@ graylog_php70_mode:
 graylog_php81_mode:
 	make php81_mode
 	php $(build_tools_directory)/composer.phar require graylog2/gelf-php
+	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 # Linting with PHP-CS
 .PHONY: lint
@@ -130,16 +134,13 @@ else ifneq (, $(project))
 	rm -r config/ || true
 endif
 	php $(build_tools_directory)/composer.phar install --prefer-dist --no-dev
-	php $(build_tools_directory)/composer.phar archive -f zip --dir=build/archives
+	php $(build_tools_directory)/composer.phar archive -f zip --dir=build/archives --file=jmap-roundcube-$(version).zip
 # In case of project build: rename and put jmap folder to root level
 ifneq (, $(project))
 	mkdir -p build/tmp/jmap
 	unzip -q build/archives/jmap-roundcube-$(version).zip -d build/tmp/jmap
 	cd build/tmp && zip -qmr jmap-roundcube-$(version)-$(project).zip jmap/ && mv jmap-roundcube-$(version)-$(project).zip ../archives
 endif
-	mkdir /tmp/openxport_archives/ || true
-	cp build/archives/* /tmp/openxport_archives/
-
 
 .PHONY: fulltest
 fulltest: lint unit_test

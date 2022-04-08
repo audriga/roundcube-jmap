@@ -26,7 +26,6 @@
         "classmap": ["src/"]
     },
     "archive": {
-        "name": "jmap-roundcube",
         "exclude": ["/tests", "/build", "/README.md"]
     }
 }

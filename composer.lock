@@ -11,7 +11,7 @@
             "version": "0.0.1",
             "source": {
                 "type": "git",
-                "url": "/home/jrsr/repos/jmap/jmap-php-icalendar_vcard/",
+                "url": "/home/jrsr/repos/php/jmap-php-icalendar_vcard/",
                 "reference": "fa7bc2ec9628a5b9d2075861fbaf41e76723ab1f"
             },
             "require": {
@@ -60,11 +60,11 @@
         },
         {
             "name": "audriga/jmap-openxport",
-            "version": "1.3.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
-                "url": "/home/jrsr/repos/jmap/jmap-php-openxport/",
-                "reference": "cdff9dbff391110d9fa86f39e4a91ae0d79e4db5"
+                "url": "/home/jrsr/repos/php/jmap-php-openxport/",
+                "reference": "1239403a3f2213792672e4ba65fabefca264cf7f"
             },
             "require": {
                 "php": ">=5.6",
@@ -109,7 +109,7 @@
                 "jmap",
                 "migration"
             ],
-            "time": "2022-04-07T15:00:34+00:00"
+            "time": "2022-04-07T08:56:06+00:00"
         },
         {
             "name": "psr/log",
