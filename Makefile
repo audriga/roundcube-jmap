@@ -55,6 +55,7 @@ php56_mode: composer_lts
 	git checkout composer.json composer.lock
 	rm $(build_tools_directory)/composer.phar
 	ln $(build_tools_directory)/composer_lts.phar $(build_tools_directory)/composer.phar
+	php $(build_tools_directory)/composer.phar require psr/log:'<2'
 	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 	podman run --rm --name php56 -v "$(PWD)":"$(PWD)" -w "$(PWD)" docker.io/phpdockerio/php56-cli sh -c "! (find . -type f -name \"*.php\" -not -path \"./tests/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")"
@@ -67,6 +68,7 @@ php70_mode: composer_lts
 	git checkout composer.json composer.lock
 	rm $(build_tools_directory)/composer.phar || true
 	ln $(build_tools_directory)/composer_lts.phar $(build_tools_directory)/composer.phar
+	php $(build_tools_directory)/composer.phar require sabre/vobject:'<4.3' sabre/uri:'<2.2' sabre/xml:'<2.2' psr/log:'<2'
 	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 	# Lint for PHP 7.0
@@ -90,7 +92,7 @@ php81_mode: composer
 .PHONY: graylog_php56_mode
 graylog_php56_mode:
 	make php56_mode
-	php $(build_tools_directory)/composer.phar require paragonie/constant_time_encoding:'<2' psr/log:'<2'
+	php $(build_tools_directory)/composer.phar require paragonie/constant_time_encoding:'<2'
 	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 # Switch to Graylog PHP 7 mode. In case you need to build for PHP 7 and include graylog
@@ -98,8 +100,6 @@ graylog_php56_mode:
 .PHONY: graylog_php70_mode
 graylog_php70_mode:
 	make php70_mode
-	php $(build_tools_directory)/composer.phar require psr/log:'<2'
-	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 # Switch to Graylog PHP 8.1 mode. In case you need to build for PHP 8.1 and include graylog
 # WARNING this will change the composer.json file
