@@ -18,7 +18,7 @@ composer:
 ifeq (, $(composer))
 	@echo "No composer command available, downloading a copy from the web"
 	mkdir -p $(build_tools_directory)
-	curl -sS https://getcomposer.org/installer | php
+	./get_composer.sh
 	mv composer.phar $(build_tools_directory)/composer_fresh.phar
 endif
 
@@ -30,7 +30,7 @@ composer_lts:
 ifeq (, $(composer_lts))
 	@echo "No composer LTS command available, downloading a copy from the web"
 	mkdir -p $(build_tools_directory)
-	curl -sS https://getcomposer.org/installer | php -- --version 2.2.11
+	./get_composer.sh --2.2
 	mv composer.phar $(build_tools_directory)/composer_lts.phar
 endif
 
