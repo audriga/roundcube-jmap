@@ -11,7 +11,7 @@
             "version": "0.0.1",
             "source": {
                 "type": "git",
-                "url": "/home/jrsr/repos/php/jmap-php-icalendar_vcard/",
+                "url": "git@bitbucket.org:audriga/jmap-php-icalendar_vcard.git",
                 "reference": "fa7bc2ec9628a5b9d2075861fbaf41e76723ab1f"
             },
             "require": {
@@ -63,7 +63,7 @@
             "version": "1.2.1",
             "source": {
                 "type": "git",
-                "url": "/home/jrsr/repos/php/jmap-php-openxport/",
+                "url": "git@bitbucket.org:audriga/jmap-php-openxport.git",
                 "reference": "1239403a3f2213792672e4ba65fabefca264cf7f"
             },
             "require": {
