@@ -1,7 +1,7 @@
 <?php
 
 // Define version
-$oxpVersion = '1.1.1';
+$oxpVersion = '1.2.1';
 
 /**
  * Fix for a refactoring bug (due to usage of bridge.php)
@@ -53,15 +53,15 @@ $logger->notice("Running PHP v" . phpversion() . ", RC v" . RCMAIL_VERSION . ", 
 
 // TODO Probably from here on only
 $accessors = array(
-    "Contacts" => new \OpenXPort\DataAccess\RoundcubeContactDataAccess(),
-    "Calendars" => new \OpenXPort\DataAccess\RoundcubeCalendarDataAccess(),
-    "CalendarEvents" => new \OpenXPort\DataAccess\RoundcubeCalendarEventDataAccess(),
+    "Contacts" => null,
+    "Calendars" => null,
+    "CalendarEvents" => null,
     "Tasks" => null,
     "Notes" => null,
     "Identities" => new \OpenXPort\DataAccess\RoundcubeIdentityDataAccess(),
     "Filters" => null,
     "StorageNodes" => null,
-    "ContactGroups" => new \OpenXPort\DataAccess\RoundcubeContactGroupDataAccess(),
+    "ContactGroups" => null,
     "Cards" => new \OpenXPort\DataAccess\RoundcubeContactDataAccess(),
     "CardGroups" => new \OpenXPort\DataAccess\RoundcubeContactGroupDataAccess(),
 );
@@ -71,15 +71,15 @@ $accessors = array(
  * "null" means that no adapter class is present/available for the given data type
 */
 $adapters = array(
-    "Contacts" => new \OpenXPort\Adapter\RoundcubeVCardAdapter(),
-    "Calendars" => new \OpenXPort\Adapter\RoundcubeCalendarAdapter(),
-    "CalendarEvents" => new \OpenXPort\Adapter\RoundcubeCalendarEventAdapter(),
+    "Contacts" => null,
+    "Calendars" => null,
+    "CalendarEvents" => null,
     "Tasks" => null,
     "Notes" => null,
     "Identities" => new \OpenXPort\Adapter\RoundcubeIdentityAdapter(),
     "Filters" => null,
     "StorageNodes" => null,
-    "ContactGroups" => new \OpenXPort\Adapter\RoundcubeContactGroupAdapter(),
+    "ContactGroups" => null,
     "Cards" => new \OpenXPort\Adapter\RoundcubeJSContactVCardAdapter(),
     "CardGroups" => new \OpenXPort\Adapter\RoundcubeCardGroupAdapter()
 );
@@ -89,15 +89,15 @@ $adapters = array(
  * "null" means that no mapper class is present/available for the given data type
 */
 $mappers = array(
-    "Contacts" => new \OpenXPort\Mapper\RoundcubeVCardMapper(),
-    "Calendars" => new \OpenXPort\Mapper\RoundcubeCalendarMapper(),
-    "CalendarEvents" => new \OpenXPort\Mapper\RoundcubeCalendarEventMapper(),
+    "Contacts" => null,
+    "Calendars" => null,
+    "CalendarEvents" => null,
     "Tasks" => null,
     "Notes" => null,
     "Identities" => new \OpenXPort\Mapper\RoundcubeIdentityMapper(),
     "Filters" => null,
     "StorageNodes" => null,
-    "ContactGroups" => new \OpenXPort\Mapper\RoundcubeContactGroupMapper(),
+    "ContactGroups" => null,
     "Cards" => new \OpenXPort\Mapper\RoundcubeJSContactVCardMapper(),
     "CardGroups" => new \OpenXPort\Mapper\RoundcubeCardGroupMapper()
 );

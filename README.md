@@ -5,8 +5,8 @@ Please note that this version is still in its early stages.
 
 The following data types are currently supported by the JMAP Plugin for Roundcube:
 
-* Contacts over the JMAP for Contacts protocol
-* Calendars over the JMAP for Calendars protocol, built on top of the [JSCalendar](https://tools.ietf.org/html/draft-ietf-calext-jscalendar-32) format
+* Signatures over the [JMAP for Mail](https://www.rfc-editor.org/rfc/rfc8621) protocol
+* Contacts over the JMAP for Contacts based on JSContact protocol (see https://www.audriga.eu/jmap/jscontact/ )
 
 ## Installation
 1. Run `make` to initialize the project for the default PHP version (8.1). Use other build targets (e.g. `make php56_mode` or `make php70_mode`) instead, in case you are using a different version.
@@ -37,5 +37,5 @@ You can also run them separately:
 For debugging purposes it makes sense to throw some cURL calls at the API. For example, this is how you tell the JMAP API to return all Contacts:
 
 ```
-curl <roundcube-address>plugins/jmap/jmap.php -u <username>:<password> -d '{"using":["urn:ietf:params:jmap:contacts"],"methodCalls":[["Contact/get", {"accountId":"<username>"}, "0"]]}'
+curl <roundcube-address>plugins/jmap/jmap.php -u <username>:<password> -d '{"using":["https://www.audriga.eu/jmap/jscontact/"],"methodCalls":[["Card/get", {"accountId":"<username>"}, "0"]]}'
 ```
