@@ -100,6 +100,8 @@ graylog_php56_mode:
 .PHONY: graylog_php70_mode
 graylog_php70_mode:
 	make php70_mode
+	php $(build_tools_directory)/composer.phar require graylog2/gelf-php
+	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 # Switch to Graylog PHP 8.1 mode. In case you need to build for PHP 8.1 and include graylog
 # WARNING this will change the composer.json file
