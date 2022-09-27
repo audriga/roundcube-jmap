@@ -53,12 +53,12 @@ update:
 .PHONY: php56_mode
 php56_mode: composer_lts
 	git checkout composer.json composer.lock
-	rm $(build_tools_directory)/composer.phar
+	rm $(build_tools_directory)/composer.phar || true
 	ln $(build_tools_directory)/composer_lts.phar $(build_tools_directory)/composer.phar
-	php $(build_tools_directory)/composer.phar require psr/log:'<2'
+	php $(build_tools_directory)/composer.phar require sabre/vobject:'<4.3' sabre/uri:'<2' sabre/xml:'<2' psr/log:'<2'
 	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
-	podman run --rm --name php56 -v "$(PWD)":"$(PWD)" -w "$(PWD)" docker.io/phpdockerio/php56-cli sh -c "! (find . -type f -name \"*.php\" -not -path \"./tests/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")"
+	podman run --rm --name php56 -v "$(PWD)":"$(PWD)" -w "$(PWD)" docker.io/phpdockerio/php56-cli sh -c "! (find . -type f -name \"*.php\" -not -path \"*/tests/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")"
 
 # Switch to PHP 7 mode. In case you need to build for PHP 7
 # Requires podman for linting based on https://github.com/dbfx/github-phplint
@@ -72,7 +72,7 @@ php70_mode: composer_lts
 	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 	# Lint for PHP 7.0
-	podman run --rm --name php70  -v "$(PWD)":"$(PWD)" -w "$(PWD)" docker.io/jetpulp/php70-cli sh -c "! (find . -type f -name \"*.php\" -not -path \"./tests/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")"
+	podman run --rm --name php70  -v "$(PWD)":"$(PWD)" -w "$(PWD)" docker.io/jetpulp/php70-cli sh -c "! (find . -type f -name \"*.php\" -not -path \"*/tests/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")"
 
 # Switch to PHP 8 mode
 # TODO broken for now due to https://github.com/composer/composer/issues/10702
@@ -100,6 +100,8 @@ graylog_php56_mode:
 .PHONY: graylog_php70_mode
 graylog_php70_mode:
 	make php70_mode
+	php $(build_tools_directory)/composer.phar require graylog2/gelf-php
+	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
 
 # Switch to Graylog PHP 8.1 mode. In case you need to build for PHP 8.1 and include graylog
 # WARNING this will change the composer.json file
@@ -124,11 +126,14 @@ zip:
 # In case of project build: use a predefined config
 ifeq (integration,$(project))
 	cp tests/integration/roundcube_config.php config/config.php
+# We want to keep the config for the elisa project TODO probably also for other projects, right?
+else ifeq (elisa,$(project))
+	rm -r config/config.php || true
 else ifneq (, $(project))
 	rm -r config/ || true
 endif
 	php $(build_tools_directory)/composer.phar install --prefer-dist --no-dev
-	php $(build_tools_directory)/composer.phar archive -f zip --dir=build/archives --file=jmap-roundcube-$(version).zip
+	php $(build_tools_directory)/composer.phar archive -f zip --dir=build/archives --file=jmap-roundcube-$(version)
 # In case of project build: rename and put jmap folder to root level
 ifneq (, $(project))
 	mkdir -p build/tmp/jmap
