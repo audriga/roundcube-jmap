@@ -4,6 +4,20 @@ Roundcube JMAP Plugin Release Notes
 
 .. contents:: Topics
 
+v1.2.2
+=======
+
+Release Summary
+---------------
+Split OXP into separate components
+
+Details
+-------
+* Roundcube JMAP lives in its own repository now!
+* Make jscontact, mail and debug default capabilities
+* Split Calendar and legacy Contact code into the dev branch
+* Verify checksum for composer installer script
+
 v1.2.1
 =======
 
