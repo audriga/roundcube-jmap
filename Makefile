@@ -126,6 +126,9 @@ zip:
 # In case of project build: use a predefined config
 ifeq (integration,$(project))
 	cp tests/integration/roundcube_config.php config/config.php
+# We want to keep the config for the elisa project TODO probably also for other projects, right?
+else ifeq (elisa,$(project))
+	rm -r config/config.php || true
 else ifneq (, $(project))
 	rm -r config/ || true
 endif
