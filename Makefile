@@ -128,7 +128,7 @@ else ifneq (, $(project))
 	rm -r config/ || true
 endif
 	php $(build_tools_directory)/composer.phar install --prefer-dist --no-dev
-	php $(build_tools_directory)/composer.phar archive -f zip --dir=build/archives --file=jmap-roundcube-$(version).zip
+	php $(build_tools_directory)/composer.phar archive -f zip --dir=build/archives --file=jmap-roundcube-$(version)
 # In case of project build: rename and put jmap folder to root level
 ifneq (, $(project))
 	mkdir -p build/tmp/jmap
