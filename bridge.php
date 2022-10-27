@@ -84,6 +84,21 @@ if (true) { // OpenXPort: Task is always assumed to be login
     $_POST['_action'] = 'login';
     $_POST['_task'] = 'login';
 
+    // An array to store the admin user, as well the user-to-impersonate
+    // (in case of admin auth)
+    $users = [];
+
+    // Check if we're dealing with admin auth credentials
+    // and if yes, then take the first part as the admin username
+    // to use for login
+    if (mb_strpos($_POST['_user'], "*")) {
+        $users = explode("*", $_POST['_user']);
+        $_POST['_user'] = $users[0];
+    }
+
+    // TODO: Find a way to set the user with the provided username
+    // for impersonation as the current user
+
     $auth = $RCMAIL->plugins->exec_hook('authenticate', array(
             'host'  => $RCMAIL->autoselect_host(),
             'user'  => trim(rcube_utils::get_input_value('_user', rcube_utils::INPUT_POST)),
