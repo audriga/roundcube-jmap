@@ -96,9 +96,6 @@ if (true) { // OpenXPort: Task is always assumed to be login
         $_POST['_user'] = $users[0];
     }
 
-    // TODO: Find a way to set the user with the provided username
-    // for impersonation as the current user
-
     $auth = $RCMAIL->plugins->exec_hook('authenticate', array(
             'host'  => $RCMAIL->autoselect_host(),
             'user'  => trim(rcube_utils::get_input_value('_user', rcube_utils::INPUT_POST)),
@@ -184,6 +181,22 @@ if (true) { // OpenXPort: Task is always assumed to be login
 
         if (!isset($_SESSION['user_id'])) {
             $RCMAIL->kill_session();
+        }
+    }
+
+    // Obtain the username of the user that we want to act on behalf of
+    if (isset($users[1]) && !empty($users[1])) {
+        if (!in_array($users[0], $oxpConfig["adminUsers"])) {
+            http_response_code(403);
+            die("403 Forbidden");
+        }
+
+        // Try to get the user that corresponds to this username via the rcube_user::query() method
+        $userToSetAsCurrentUser = rcube_user::query($users[1], explode("@", $users[1])[1]);
+
+        // If we managed to get this user, then we set this user as the current user within Roundcube via set_user()
+        if (isset($userToSetAsCurrentUser) && !empty($userToSetAsCurrentUser)) {
+            $RCMAIL->set_user($userToSetAsCurrentUser);
         }
     }
 }
