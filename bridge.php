@@ -192,7 +192,11 @@ if (true) { // OpenXPort: Task is always assumed to be login
         }
 
         // Try to get the user that corresponds to this username via the rcube_user::query() method
-        $userToSetAsCurrentUser = rcube_user::query($users[1], explode("@", $users[1])[1]);
+        // Since query() requires the user's domain as the second parameter, we take the domain of the logged-in user
+        // (in admin auth scenario, that is the admin user). We assume for admin auth that both admin
+        // and user-acted-on-behalf-of share the same domain
+        $userDomain = $RCMAIL->user->get_username('domain');
+        $userToSetAsCurrentUser = rcube_user::query($users[1], $userDomain);
 
         // If we managed to get this user, then we set this user as the current user within Roundcube via set_user()
         if (isset($userToSetAsCurrentUser) && !empty($userToSetAsCurrentUser)) {
