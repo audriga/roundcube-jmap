@@ -34,7 +34,7 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
         // Read all contacts from Roundcube
         $contacts = $this->contact_db->list_records(null, self::NUMBER_OF_CONTACTS_RETRIEVED, true);
 
-        $this->logger->info("Got " . sizeof($contacts) . " contacts.");
+        $this->logger->info("Got " . sizeof($contacts->records) . " contacts.");
 
         // An array to hold the vCards of all contacts that we've read from Roundcube
         $result = [];
