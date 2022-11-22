@@ -12,6 +12,9 @@ return array(
     /// General configuration
     // ********************** //
 
+    // Admin users for Webclient admin auth. Users should exist on the webclient and belong to the same domain.
+    'adminUsers' => array('yourchosenadminuser'),
+
     // Enabled capabilities for this endpoint
     'capabilities' => array('jscontact', 'mail', 'debug'),
 
