@@ -84,6 +84,18 @@ if (true) { // OpenXPort: Task is always assumed to be login
     $_POST['_action'] = 'login';
     $_POST['_task'] = 'login';
 
+    // An array to store the admin user, as well the user-to-impersonate
+    // (in case of admin auth)
+    $users = [];
+
+    // Check if we're dealing with admin auth credentials
+    // and if yes, then take the first part as the admin username
+    // to use for login
+    if (mb_strpos($_POST['_user'], "*")) {
+        $users = explode("*", $_POST['_user']);
+        $_POST['_user'] = $users[0];
+    }
+
     $auth = $RCMAIL->plugins->exec_hook('authenticate', array(
             'host'  => $RCMAIL->autoselect_host(),
             'user'  => trim(rcube_utils::get_input_value('_user', rcube_utils::INPUT_POST)),
@@ -169,6 +181,26 @@ if (true) { // OpenXPort: Task is always assumed to be login
 
         if (!isset($_SESSION['user_id'])) {
             $RCMAIL->kill_session();
+        }
+    }
+
+    // Obtain the username of the user that we want to act on behalf of
+    if (isset($users[1]) && !empty($users[1])) {
+        if (!in_array($users[0], $oxpConfig["adminUsers"])) {
+            http_response_code(403);
+            die("403 Forbidden");
+        }
+
+        // Try to get the user that corresponds to this username via the rcube_user::query() method
+        // Since query() requires the user's domain as the second parameter, we take the domain of the logged-in user
+        // (in admin auth scenario, that is the admin user). We assume for admin auth that both admin
+        // and user-acted-on-behalf-of share the same domain
+        $userDomain = $RCMAIL->user->get_username('domain');
+        $userToSetAsCurrentUser = rcube_user::query($users[1], $userDomain);
+
+        // If we managed to get this user, then we set this user as the current user within Roundcube via set_user()
+        if (isset($userToSetAsCurrentUser) && !empty($userToSetAsCurrentUser)) {
+            $RCMAIL->set_user($userToSetAsCurrentUser);
         }
     }
 }
