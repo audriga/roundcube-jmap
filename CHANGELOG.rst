@@ -4,6 +4,18 @@ Roundcube JMAP Plugin Release Notes
 
 .. contents:: Topics
 
+v1.3.0
+=======
+
+Release Summary
+---------------
+Now supports Admin auth (domain-restricted).
+
+Details
+-------
+* Support admin auth (domain-restricted) #5070
+* Fix fatal error for Contact/get on PHP 8
+
 v1.2.2
 =======
 
