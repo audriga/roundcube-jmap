@@ -1,7 +1,7 @@
 <?php
 
 // Define version
-$oxpVersion = '1.2.1';
+$oxpVersion = '1.3.0';
 
 /**
  * Fix for a refactoring bug (due to usage of bridge.php)
