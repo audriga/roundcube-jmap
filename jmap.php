@@ -11,12 +11,12 @@ $oxpVersion = '1.3.0';
  * Since jmap.php is not positioned as a file on the same level as index.php,
  * which is normally the running script, the include_path of Roundcube gets messed up.
  * That's why we have to explicitly set $_SERVER['SCRIPT_FILENAME'] to a correct value here,
- * in order to not mess up the indclude_path.
+ * in order to not mess up the include_path.
  * For more info, see: https://github.com/roundcube/roundcubemail/blob/master/program/include/iniset.php
  * (lines 27, 47 and 48)
  */
 
-$_SERVER['SCRIPT_FILENAME'] = dirname($_SERVER['SCRIPT_FILENAME'], 2);
+$_SERVER['SCRIPT_FILENAME'] = realpath(__DIR__ . '/../../jmap.php');
 
 /* START OF OPENXPORT Code only */
 // Use our composer autoload
