@@ -4,6 +4,17 @@ Roundcube JMAP Plugin Release Notes
 
 .. contents:: Topics
 
+v1.3.1
+=======
+
+Release Summary
+---------------
+Use realpath() instead of dirname() for PHP<7
+
+Details
+-------
+* Use realpath() instead of dirname() for PHP<7 #5867
+
 v1.3.0
 =======
 
