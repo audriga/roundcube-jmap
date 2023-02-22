@@ -138,11 +138,9 @@ zip:
 # In case of project build: use a predefined config
 ifeq (integration,$(project))
 	cp tests/integration/roundcube_config.php config/config.php
-# We want to keep the config for the elisa project TODO probably also for other projects, right?
-else ifeq (elisa,$(project))
-	rm -r config/config.php || true
+# We want to exclude a config.php for projects
 else ifneq (, $(project))
-	rm -r config/ || true
+	rm config/config.php || true
 endif
 	php $(build_tools_directory)/composer.phar install --prefer-dist --no-dev
 	php $(build_tools_directory)/composer.phar archive -f zip --dir=build/archives --file=jmap-roundcube-$(version)
