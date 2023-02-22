@@ -74,6 +74,18 @@ php70_mode: composer_lts
 	# Lint for PHP 7.0
 	podman run --rm --name php70  -v "$(PWD)":"$(PWD)" -w "$(PWD)" docker.io/jetpulp/php70-cli sh -c "! (find . -type f -name \"*.php\" -not -path \"*/tests/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")"
 
+# Switch to PHP 7.4 mode. In case you need to build for PHP 7
+# Requires podman for linting based on https://github.com/dbfx/github-phplint
+.PHONY: php74_mode
+php74_mode: composer
+	git checkout composer.json composer.lock
+	rm $(build_tools_directory)/composer.phar || true
+	ln $(build_tools_directory)/composer_fresh.phar $(build_tools_directory)/composer.phar
+	php $(build_tools_directory)/composer.phar update --prefer-dist --no-dev
+
+	# Lint for PHP 7.4
+	podman run --rm --name php74  -v "$(PWD)":"$(PWD)" -w "$(PWD)" phpdockerio/php74-cli sh -c "! (find . -type f -name \"*.php\" -not -path \"*/tests/*\" $1 -exec php -l -n {} \; | grep -v \"No syntax errors detected\")"
+
 # Switch to PHP 8 mode
 # TODO broken for now due to https://github.com/composer/composer/issues/10702
 # WARNING this will change the composer.json file
