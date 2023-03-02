@@ -102,5 +102,7 @@ $mappers = array(
     "CardGroups" => new \OpenXPort\Mapper\RoundcubeCardGroupMapper()
 );
 
-$server = new \OpenXPort\Jmap\Core\Server($accessors, $adapters, $mappers, $oxpConfig);
+$session = new \OpenXPort\Jmap\Core\Session($_SERVER['PHP_AUTH_USER'], "", "");
+
+$server = new \OpenXPort\Jmap\Core\Server($accessors, $adapters, $mappers, $oxpConfig, $session);
 $server->handleJmapRequest($jmapRequest);
