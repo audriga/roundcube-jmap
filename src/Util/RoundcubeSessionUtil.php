@@ -14,7 +14,15 @@ class RoundcubeSessionUtil extends SessionUtil
         }
 
         if (!isset($accountData['username'])) {
-            throw new \Exception("Username not found in Roundcube account data");
+            throw new \Exception("\"username\" not found in Roundcube account data");
+        }
+
+        if (!isset($accountData['accountId'])) {
+            throw new \Exception("\"accountId\" not found in Roundcube account data");
+        }
+
+        if (!isset($accountData['accountCapabilities'])) {
+            throw new \Exception("\"accountCapabilities\" not found in Roundcube account data");
         }
 
         $accountId = $accountData['accountId'];
@@ -36,10 +44,11 @@ class RoundcubeSessionUtil extends SessionUtil
         $accounts = [$accountId => $sessionAccount];
 
         // We construct "primaryAccounts" of the JMAP session object by taking the array keys of
-        // the account capabilities (i.e., the account capability names) and map them all to accountId
-        $primaryAccounts = array_map(function ($element) use ($accountId) {
-            return [$element, $accountId];
-        }, array_keys($accountCapabilities));
+        // the account capabilities (i.e., the account capability names) and mapping them all to accountId
+        $primaryAccounts = array_reduce(array_keys($accountCapabilities), function ($result, $item) use ($accountId) {
+            $result[$item] = $accountId;
+            return $result;
+        }, []);
         
         return new Session($accounts, $primaryAccounts, $username);
     }
