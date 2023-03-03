@@ -1,5 +1,10 @@
 <?php
 
+use OpenXPort\Jmap\Contact\ContactsAccountCapability;
+use OpenXPort\Jmap\Core\CoreAccountCapability;
+use OpenXPort\Jmap\Mail\SubmissionAccountCapability;
+use OpenXPort\Util\RoundcubeSessionUtil;
+
 // Define version
 $oxpVersion = '1.3.0';
 
@@ -102,7 +107,12 @@ $mappers = array(
     "CardGroups" => new \OpenXPort\Mapper\RoundcubeCardGroupMapper()
 );
 
-$session = new \OpenXPort\Jmap\Core\Session($_SERVER['PHP_AUTH_USER'], "", "");
+$accountData = [
+    'accountId' => $RCMAIL->user->ID,
+    'username' => isset($users[1]) ? $users[1] : $_POST['_user'],
+    'accountCapabilities' => []
+];
+$session = RoundcubeSessionUtil::createSession($accountData);
 
 $server = new \OpenXPort\Jmap\Core\Server($accessors, $adapters, $mappers, $oxpConfig, $session);
 $server->handleJmapRequest($jmapRequest);
