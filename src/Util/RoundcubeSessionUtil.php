@@ -27,6 +27,12 @@ class RoundcubeSessionUtil extends SessionUtil
 
         $accountId = $accountData['accountId'];
         $username = $accountData['username'];
+
+        // Map each account capability's name to the capability's options and put this mapping
+        // as an element into a new array (initially empty array)
+        // Example:
+        // * Before: [new SubmissionCapability()]
+        // * After (in JSON): {"urn:ietf:params:jmap:submission" : {"maxDelaySend": 0}}
         $accountCapabilities = array_reduce($accountData['accountCapabilities'], function ($result, $item) {
             $result[$item->getName()] = (object) $item->getCapabilities();
             return $result;
