@@ -30,6 +30,34 @@ final class RoundcubeSessionUtilTest extends TestCase
         $this->account = null;
     }
 
+    public function testCreateSessionWithEmptyAccountData()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Provided account data from Roundcube is empty");
+        $this->session = RoundcubeSessionUtil::createSession([]);
+    }
+
+    public function testCreateSessionWithoutUsername()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("\"username\" not found in Roundcube account data");
+        $this->session = RoundcubeSessionUtil::createSession(['accountId' => 'bla', 'accountCapabilities' => []]);
+    }
+
+    public function testCreateSessionWithoutAccountId()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("\"accountId\" not found in Roundcube account data");
+        $this->session = RoundcubeSessionUtil::createSession(['username' => 'bla', 'accountCapabilities' => []]);
+    }
+
+    public function testCreateSessionWithoutAccountCapabilities()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("\"accountCapabilities\" not found in Roundcube account data");
+        $this->session = RoundcubeSessionUtil::createSession(['username' => 'bla', 'accountId' => 'anotherBla']);
+    }
+
     public function testCreateSessionSuccessfully()
     {
         $accountData = [
@@ -52,9 +80,10 @@ final class RoundcubeSessionUtilTest extends TestCase
 
         $this->account->setAccountCapabilities($accountCapabilities);
 
-        $primaryAccounts = array_map(function ($element) use ($accountData) {
-            return [$element, $accountData['accountId']];
-        }, array_keys($accountCapabilities));
+        $primaryAccounts = array_reduce(array_keys($accountCapabilities), function ($result, $item) use ($accountData) {
+            $result[$item] = $accountData['accountId'];
+            return $result;
+        }, []);
 
         $this->assertNotNull($this->session);
         $this->assertEquals($this->session->getAccounts(), [
