@@ -40,11 +40,11 @@ class RoundcubeSessionUtil extends SessionUtil
 
         $sessionAccount = new Account();
         $sessionAccount->setName($username);
-        
+
         // Assuming true and false as default values for isPersonal and isReadOnly for now
         $sessionAccount->setIsPersonal(true);
         $sessionAccount->setIsReadOnly(false);
-        
+
         $sessionAccount->setAccountCapabilities($accountCapabilities);
 
         $accounts = [$accountId => $sessionAccount];
@@ -55,7 +55,7 @@ class RoundcubeSessionUtil extends SessionUtil
             $result[$item] = $accountId;
             return $result;
         }, []);
-        
+
         return new Session($accounts, $primaryAccounts, $username);
     }
 }
