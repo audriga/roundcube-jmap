@@ -1,8 +1,9 @@
 <?php
 
 return array(
+    'capabilities' => array('jscontact', 'mail', 'debug'),
     'adminUsers' => array('wp13405851-openxport'),
-    #'verboseErrorOutput' => true,
+    'verboseErrorOutput' => true,
     'allowFileLog' => true,
     'allowGraylog' => true,
     'logLevel' => \Psr\Log\LogLevel::INFO,
