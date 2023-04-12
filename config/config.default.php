@@ -16,7 +16,7 @@ return array(
     'adminUsers' => array('yourchosenadminuser'),
 
     // Enabled capabilities for this endpoint
-    'capabilities' => array('jscontact', 'mail', 'debug'),
+    'capabilities' => array('jscontact', 'mail'),
 
     // ********************** //
     /// Logging configuration
