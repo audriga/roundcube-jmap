@@ -132,6 +132,12 @@ lint:
 	# Lint with CodeSniffer
 	vendor/bin/phpcs src/
 
+# Run Unit tests
+.PHONY: unit_test
+unit_test:
+	php $(build_tools_directory)/composer.phar install --prefer-dist
+	vendor/bin/phpunit -c tests/phpunit.xml --testdox
+
 # Build a ZIP for deploying
 .PHONY: zip
 zip:
@@ -152,4 +158,4 @@ ifneq (, $(project))
 endif
 
 .PHONY: fulltest
-fulltest: lint
+fulltest: lint unit_test
