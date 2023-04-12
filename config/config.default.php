@@ -16,14 +16,18 @@ return array(
     'adminUsers' => array('yourchosenadminuser'),
 
     // Enabled capabilities for this endpoint
-    'capabilities' => array('jscontact', 'mail', 'debug'),
+    'capabilities' => array('jscontact', 'mail'),
 
     // ********************** //
     /// Logging configuration
     // ********************** //
     // NOTE: Only a single logger will be used
 
-    // Allow FileLogger (also as fallback in case no other is working)
+    // Print verbose error output via API for debugging
+    // NOTE: Not recommended on public-facing setups
+    'verboseErrorOutput' => false,
+
+    // Allow File logger (also as fallback in case no other is working)
     'allowFileLog' => false,
 
     // Allow Graylog logger (in case gelf-php included under vendor/)

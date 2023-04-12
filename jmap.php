@@ -27,11 +27,6 @@ $_SERVER['SCRIPT_FILENAME'] = realpath(__DIR__ . '/../../index.php');
 // Use our composer autoload
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Print debug output via API on error
-// NOTE: Do not use on public-facing setups
-$handler = new \OpenXPort\Jmap\Core\ErrorHandler();
-$handler->setHandlers();
-
 // Build config
 $configDefault = include(__DIR__ . '/config/config.default.php');
 $configFile = __DIR__ . '/config/config.php';
@@ -43,6 +38,10 @@ if (file_exists($configFile)) {
         $oxpConfig = array_merge($configDefault, $configUser);
     }
 };
+
+// Handle errors and exceptions as JSON responses
+$handler = new \OpenXPort\Jmap\Core\ErrorHandler($oxpConfig["verboseErrorOutput"]);
+$handler->setHandlers();
 
 // Decode JSON post body here in case the debug capability is included
 $jmapRequest = OpenXPort\Util\HttpUtil::getRequestBody();
