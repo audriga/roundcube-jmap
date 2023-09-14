@@ -84,7 +84,10 @@ $adapters = array(
     "Filters" => null,
     "StorageNodes" => null,
     "ContactGroups" => null,
-    "Cards" => new \OpenXPort\Adapter\RoundcubeJSContactVCardAdapter(),
+    "Cards" => new \OpenXPort\Adapter\RoundcubeJSContactVCardAdapter(
+        $oxpConfig['vCardParsing'],
+        $oxpConfig['dumpInvalidVCards']
+    ),
     "CardGroups" => new \OpenXPort\Adapter\RoundcubeCardGroupAdapter()
 );
 

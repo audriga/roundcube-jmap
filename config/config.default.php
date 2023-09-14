@@ -49,5 +49,16 @@ return array(
     'graylogAllowSelfSigned' => false,
 
     // Use TLS
-    'graylogUseTls' => true
+    'graylogUseTls' => true,
+
+    // Method of handling broken vCards
+    // Possible values:
+    // 'strict',
+    // 'ignoreInvalidLines',
+    // 'ignoreInvalidVCards'
+    // WARNING: Changing this will ignore certain error cases and may cause data loss
+    'vCardParsing' => 'strict',
+
+    // Allow logging of entire vCards when broken
+    'dumpInvalidVCards' => false
 );
