@@ -4,6 +4,23 @@ Roundcube JMAP Plugin Release Notes
 
 .. contents:: Topics
 
+v1.4.0
+=======
+
+Release Summary
+---------------
+SaaS-ready release with some more enhancements.
+
+Details
+-------
+* NEW: Debug capability and verbose error output is now off by default for SaaS operation #6052
+* NEW: vCardParsing and dumpInvalidVCards config options #6477
+* NEW: Expose proper session object #6173
+* Small build file fixes
+* Fix not finding Roundcube bootstrap file #6082
+* Bump OXP iCalendar/vCard to 0.4.0
+* Bump OXP Core to 1.7.1
+
 v1.3.1
 =======
 
