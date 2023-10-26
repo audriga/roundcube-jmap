@@ -6,7 +6,7 @@ use OpenXPort\Jmap\Mail\SubmissionAccountCapability;
 use OpenXPort\Util\RoundcubeSessionUtil;
 
 // Define version
-$oxpVersion = '1.3.0';
+$oxpVersion = '1.4.0';
 
 /**
  * Fix for a refactoring bug (due to usage of bridge.php)
