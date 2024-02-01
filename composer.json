@@ -1,7 +1,7 @@
 {
     "name": "audriga/roundcube-jmap",
     "description": "JMAP support for Roundcube",
-    "type": "project",
+    "type": "roundcube-plugin",
     "license": "GPL-3.0-or-later",
     "authors": [
         {
