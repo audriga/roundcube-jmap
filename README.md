@@ -1,7 +1,7 @@
 # Roundcube JMAP
-The JMAP plugin for Roundcube provides [JMAP](https://jmap.io/) support for Roundcube by exposing a RESTful API Endpoint which speaks the JMAP Protocol.
+⚠️  This version is still in its early stages. This API exposes user data. It is not recommended to expose this API to untrusted networks for now. Please consider contacting us before using this in production.
 
-Please note that this version is still in its early stages.
+The JMAP plugin for Roundcube provides [JMAP](https://jmap.io/) support for Roundcube by exposing a RESTful API Endpoint which speaks the JMAP Protocol.
 
 The following data types are currently supported by the JMAP Plugin for Roundcube:
 
@@ -32,6 +32,12 @@ You can also run them separately:
 
 * **Static Analysis** via `make lint`
 * **Unit Tests** via `make unit_test`
+
+#### Tested against
+
+PHP: 5.6, 7.0, 8.1 and 8.2
+
+Roundcube: 1.2, 1.3, 1.4 and 1.6
 
 ### Debug
 For debugging purposes it makes sense to throw some cURL calls at the API. For example, this is how you tell the JMAP API to return all Contacts:
