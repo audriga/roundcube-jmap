@@ -2,7 +2,7 @@
     "name": "audriga/jmap-roundcube",
     "description": "JMAP support for Roundcube",
     "type": "project",
-    "license": "Apache-2.0",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Stanimir Bozhilov",
