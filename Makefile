@@ -136,7 +136,7 @@ lint:
 .PHONY: unit_test
 unit_test:
 	php $(build_tools_directory)/composer.phar install --prefer-dist
-	vendor/bin/phpunit -c tests/phpunit.xml --testdox
+	vendor/bin/phpunit tests/ --testdox
 
 # Build a ZIP for deploying
 .PHONY: zip
