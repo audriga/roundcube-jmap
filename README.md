@@ -7,8 +7,9 @@ The following data types are currently supported by the JMAP Plugin for Roundcub
 
 * Signatures over the [JMAP for Mail](https://www.rfc-editor.org/rfc/rfc8621) protocol
 * Contacts over the JMAP for Contacts based on JSContact protocol (see https://www.audriga.eu/jmap/jscontact/ )
+* (Planned) Calendars over the [JMAP for Calendars](https://datatracker.ietf.org/doc/draft-ietf-jmap-calendars/) protocol
 
-The plugin could be used as a modern replacement for the CardDAV endpoint (also CalDAV in a future version).
+This plugin allows Roundcube to function as an address book sync server. It makes use of the JMAP for Contacts protocol for that. JMAP for Contacts is a successor to [CardDAV](https://www.rfc-editor.org/rfc/rfc6352).
 
 ## Installation
 1. Run `make` to initialize the project for the default PHP version (8.1). Use other build targets (e.g. `make php56_mode` or `make php70_mode`) instead, in case you are using a different version.
