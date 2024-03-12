@@ -11,8 +11,6 @@ The following data types are currently supported by the JMAP Plugin for Roundcub
 
 This plugin allows Roundcube to function as an address book sync server. It makes use of the JMAP for Contacts protocol for that. JMAP for Contacts is a successor to [CardDAV](https://www.rfc-editor.org/rfc/rfc6352).
 
-The plugin could be used as a modern replacement for the CardDAV endpoint (also CalDAV in a future version).
-
 ## Installation
 1. Run `make` to initialize the project for the default PHP version (8.1). Use other build targets (e.g. `make php56_mode` or `make php70_mode`) instead, in case you are using a different version.
 1. (optional) there are build targets that enable logging to graylog instead of a file, e.g. run `make graylog56_mode`
