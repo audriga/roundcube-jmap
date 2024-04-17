@@ -1,30 +1,11 @@
 <?php
 
-use OpenXPort\Jmap\Contact\ContactsAccountCapability;
-use OpenXPort\Jmap\Core\CoreAccountCapability;
-use OpenXPort\Jmap\Mail\SubmissionAccountCapability;
 use OpenXPort\Util\RoundcubeSessionUtil;
 
 // Define version
-$oxpVersion = '1.4.0';
+$oxpVersion = '1.4.1';
 
-/**
- * Fix for a refactoring bug (due to usage of bridge.php)
- *
- * The problem is that $_SERVER['SCRIPT_FILENAME'] is used for setting the include_path for Roundcube,
- * but it references the currently executed script, which is jmap.php in our case.
- * Since jmap.php is not positioned as a file on the same level as index.php,
- * which is normally the running script, the include_path of Roundcube gets messed up.
- * That's why we have to explicitly hack $_SERVER['SCRIPT_FILENAME'] so roundcube gets the correct
- * include_path.
- * For more info, see: https://github.com/roundcube/roundcubemail/blob/master/program/include/iniset.php
- * (lines 27, 47 and 48)
- */
-
-$_SERVER['SCRIPT_FILENAME'] = realpath(__DIR__ . '/../../index.php');
-
-/* START OF OPENXPORT Code only */
-// Use our composer autoload
+// Use OXP composer autoload
 require_once __DIR__ . '/vendor/autoload.php';
 
 // Build config
@@ -50,12 +31,11 @@ $jmapRequest = OpenXPort\Util\HttpUtil::getRequestBody();
 OpenXPort\Util\Logger::init($oxpConfig, $jmapRequest);
 $logger = \OpenXPort\Util\Logger::getInstance();
 
-// Reuse auth from webmailer
+// Initialize Webmailer
 require_once __DIR__ . '/bridge.php';
 
 $logger->notice("Running PHP v" . phpversion() . ", RC v" . RCMAIL_VERSION . ", Plugin v" . $oxpVersion);
 
-// TODO Probably from here on only
 $accessors = array(
     "Contacts" => null,
     "Calendars" => null,
@@ -111,7 +91,7 @@ $mappers = array(
 
 $accountData = [
     'accountId' => $RCMAIL->user->ID,
-    'username' => isset($users[1]) ? $users[1] : $_POST['_user'],
+    'username' => isset($users[1]) ? $users[1] : $user,
     'accountCapabilities' => []
 ];
 $session = RoundcubeSessionUtil::createSession($accountData);
