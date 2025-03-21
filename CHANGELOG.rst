@@ -4,6 +4,18 @@ Roundcube JMAP Plugin Release Notes
 
 .. contents:: Topics
 
+v1.4.1
+=======
+
+Release Summary
+---------------
+Change some package details and do some internal restructuring
+
+Details
+-------
+* Change name, add LICENSE, set package type to "roundcube-plugin"
+* Big restructure of bridge.php
+
 v1.4.0
 =======
 
