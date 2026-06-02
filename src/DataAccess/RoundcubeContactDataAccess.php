@@ -9,6 +9,8 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
     const NUMBER_OF_CONTACTS_RETRIEVED = 50000;
 
     private $contact_db;
+    private $db;
+    private $userID;
     private $logger;
 
     public function __construct()
@@ -17,14 +19,14 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
 
         $RCMAIL = \rcmail::get_instance(0, $GLOBALS['env']);
 
-        $db = \rcube_db::factory(
+        $this->db = \rcube_db::factory(
             $RCMAIL->config->get('db_dsnw'),
             $RCMAIL->config->get('db_dsnr'),
             $RCMAIL->config->get('db_persistent')
         );
 
-        $userID = $RCMAIL->user->ID;
-        $this->contact_db = new \rcube_contacts($db, $userID);
+        $this->userID = $RCMAIL->user->ID;
+        $this->contact_db = new \rcube_contacts($this->db, $this->userID);
     }
 
     public function getAll($accountId = null)
@@ -45,9 +47,12 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
         // does not contain a contact's ID, but we still need the ID anyway)
         foreach ($contacts as $c) {
             $contactId = $c['ID'];
-            $contactVCard = $c['vcard'];
-
-            $result[$contactId] = $contactVCard;
+            
+            // Read raw vCard directly from DB to preserve custom properties
+            $row = $this->db->fetch_assoc(
+                $this->db->query("SELECT vcard FROM contacts WHERE contact_id = ?", $contactId)
+            );
+            $result[$contactId] = $row['vcard'];
         }
 
         // Return the contact IDs and the vCards that we gathered above
@@ -56,7 +61,23 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
 
     public function get($ids, $accountId = null)
     {
-        // TODO: Implement me
+        $result = [];
+
+        foreach ($ids as $id) {
+            $row = $this->db->fetch_assoc(
+                $this->db->query(
+                    "SELECT contact_id, vcard FROM contacts WHERE contact_id = ? AND user_id = ? AND del = 0",
+                    $id,
+                    $this->userID
+                )
+            );
+
+            if ($row && !empty($row['vcard'])) {
+                $result[$row['contact_id']] = $row['vcard'];
+            }
+        }
+
+        return $result;
     }
 
     public function create($contactsToCreate, $accountId = null)
@@ -87,7 +108,18 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
 
                 // Finally, insert the associative array contact representation into Roundcube
                 // via the insert() method.
-                $contactMap[$creationId] = $this->contact_db->insert($rcubeContactToSave);
+                $newId = $this->contact_db->insert($rcubeContactToSave);
+                $contactMap[$creationId] = $newId;
+
+                // Update the vcard column with the full vCard string to preserve
+                // custom properties (CATEGORIES, SOCIALPROFILE, NOTE, etc.)
+                if ($newId) {
+                    $this->db->query(
+                        "UPDATE contacts SET vcard = ? WHERE contact_id = ?",
+                        $contactToCreate,
+                        $newId
+                    );
+                }
             }
         }
 
@@ -107,9 +139,112 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
     }
 
     // Collects multiple ids
-    // TODO support multiple FilterConditions like in JMAP standard
     public function query($accountId, $filter = null)
     {
-        // TODO: Implement me
+        $ids = [];
+
+        $query = $this->db->query(
+            "SELECT contact_id FROM contacts WHERE user_id = ? AND del = 0",
+            $this->userID
+        );
+
+        while ($row = $this->db->fetch_assoc($query)) {
+            $ids[] = (string) $row['contact_id'];
+        }
+
+        return ['ids' => $ids];
+    }
+
+    public function update($contactsToUpdate, $accountId = null)
+    {
+        $updated = [];
+        foreach ($contactsToUpdate as $id => $vCard) {
+            if (empty($vCard)) {
+                $updated[$id] = false;
+                continue;
+            }
+
+            // Parse the new vCard for standard fields
+            $vCardObject = new \rcube_vcard($vCard);
+            $rcubeContact = $vCardObject->get_assoc();
+
+            // Update standard fields via Roundcube
+            $this->contact_db->update($id, $rcubeContact);
+
+            // Update the full vCard to preserve custom properties
+            $this->db->query(
+                "UPDATE contacts SET vcard = ? WHERE contact_id = ? AND user_id = ?",
+                $vCard,
+                $id,
+                $this->userID
+            );
+
+            $updated[$id] = true;
+        }
+        return $updated;
+    }
+
+    /**
+     * Returns the current state as a Unix timestamp of the latest contact change.
+     * @see https://datatracker.ietf.org/doc/html/rfc8620#section-5.2
+     */
+    public function getCurrentState($accountId = null)
+    {
+        $result = $this->db->query(
+            "SELECT MAX(UNIX_TIMESTAMP(changed)) AS current_state FROM contacts WHERE user_id = ?",
+            $this->userID
+        );
+
+        $row = $this->db->fetch_assoc($result);
+
+        return ($row && $row['current_state']) ? (string)$row['current_state'] : "0";
+    }
+
+    /**
+     * Returns IDs of contacts created, updated, or destroyed since sinceState.
+     * State is a Unix timestamp. Roundcube has no dedicated changes table, so
+     * created and updated cannot be distinguished — all non-deleted changes are
+     * reported as updated (RFC 8620 allows this conservative approach).
+     * @see https://datatracker.ietf.org/doc/html/rfc8620#section-5.2
+     */
+    public function getChanges($sinceState, $maxChanges = 1000, $accountId = null)
+    {
+        $sinceDate = date('Y-m-d H:i:s', (int)$sinceState);
+
+        $result = $this->db->limitquery(
+            "SELECT contact_id, del FROM contacts WHERE user_id = ? AND changed > ? ORDER BY changed ASC",
+            0,
+            $maxChanges + 1,
+            $this->userID,
+            $sinceDate
+        );
+
+        $rows = [];
+        while ($row = $this->db->fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+
+        $hasMoreChanges = count($rows) > $maxChanges;
+        if ($hasMoreChanges) {
+            array_pop($rows);
+        }
+
+        $changes = ['created' => [], 'updated' => [], 'destroyed' => []];
+
+        foreach ($rows as $row) {
+            $contactId = (string)$row['contact_id'];
+            if ($row['del']) {
+                $changes['destroyed'][] = $contactId;
+            } else {
+                $changes['updated'][] = $contactId;
+            }
+        }
+
+        $newState = empty($rows) ? $sinceState : $this->getCurrentState();
+
+        return array_merge($changes, [
+            'newState' => $newState,
+            'hasMoreChanges' => $hasMoreChanges,
+        ]);
     }
 }

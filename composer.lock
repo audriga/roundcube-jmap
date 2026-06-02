@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b9f4e6b9fd0df3702f89cb9aaeec930",
+    "content-hash": "679869b7ff4e717e0176318dcfe65907",
     "packages": [
         {
             "name": "audriga/jmap-icalendar_vcard",
-            "version": "0.5.0",
+            "version": "dev-7676-support-ietf",
             "source": {
                 "type": "git",
                 "url": "https://github.com/audriga/jmap-php-icalendar_vcard.git",
-                "reference": "990379f6d8378cfffb839cd87648b65b6b4eecc6"
+                "reference": "4d3f6af545918096461ea8eef24249a29e9c6de6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/audriga/jmap-php-icalendar_vcard/zipball/990379f6d8378cfffb839cd87648b65b6b4eecc6",
-                "reference": "990379f6d8378cfffb839cd87648b65b6b4eecc6",
+                "url": "https://api.github.com/repos/audriga/jmap-php-icalendar_vcard/zipball/4d3f6af545918096461ea8eef24249a29e9c6de6",
+                "reference": "4d3f6af545918096461ea8eef24249a29e9c6de6",
                 "shasum": ""
             },
             "require": {
-                "audriga/jmap-openxport": "~1",
+                "audriga/jmap-openxport": "dev-7676-ietf-compatibility",
                 "php": ">=5.6",
                 "sabre/vobject": ">=4.2"
             },
@@ -40,7 +40,13 @@
                     "src/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "archive": {
+                "exclude": [
+                    "/tests",
+                    "/build",
+                    "/README.md"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -61,23 +67,23 @@
                 "jmap"
             ],
             "support": {
-                "issues": "https://github.com/audriga/jmap-php-icalendar_vcard/issues",
-                "source": "https://github.com/audriga/jmap-php-icalendar_vcard/tree/0.5.0"
+                "source": "https://github.com/audriga/jmap-php-icalendar_vcard/tree/7676-support-ietf",
+                "issues": "https://github.com/audriga/jmap-php-icalendar_vcard/issues"
             },
-            "time": "2024-01-11T12:55:56+00:00"
+            "time": "2026-06-02T08:05:55+00:00"
         },
         {
             "name": "audriga/jmap-openxport",
-            "version": "1.7.2",
+            "version": "dev-7676-ietf-compatibility",
             "source": {
                 "type": "git",
                 "url": "https://github.com/audriga/openxport-jmap.git",
-                "reference": "e070b3a592b6c2c1822d3673788a5af2cb7f6c58"
+                "reference": "e54691b64741045e0c3d234e956b4653fb88ccc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/audriga/openxport-jmap/zipball/e070b3a592b6c2c1822d3673788a5af2cb7f6c58",
-                "reference": "e070b3a592b6c2c1822d3673788a5af2cb7f6c58",
+                "url": "https://api.github.com/repos/audriga/openxport-jmap/zipball/e54691b64741045e0c3d234e956b4653fb88ccc4",
+                "reference": "e54691b64741045e0c3d234e956b4653fb88ccc4",
                 "shasum": ""
             },
             "require": {
@@ -99,7 +105,6 @@
                     "src/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -122,10 +127,10 @@
                 "migration"
             ],
             "support": {
-                "issues": "https://github.com/audriga/openxport-jmap/issues",
-                "source": "https://github.com/audriga/openxport-jmap/tree/1.7.2"
+                "source": "https://github.com/audriga/openxport-jmap/tree/7676-ietf-compatibility",
+                "issues": "https://github.com/audriga/openxport-jmap/issues"
             },
-            "time": "2024-01-11T12:47:38+00:00"
+            "time": "2026-06-02T07:25:39+00:00"
         },
         {
             "name": "psr/log",
@@ -2110,12 +2115,15 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "audriga/jmap-icalendar_vcard": 20,
+        "audriga/jmap-openxport": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.6.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
