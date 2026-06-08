@@ -283,10 +283,6 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
 
     /**
      * Returns IDs of contacts created, updated, or destroyed since sinceState.
-     * State is a Unix timestamp. Roundcube has no dedicated changes table, so
-     * created and updated cannot be distinguished — all non-deleted changes are
-     * reported as updated (RFC 8620 allows this conservative approach).
-     * @see https://datatracker.ietf.org/doc/html/rfc8620#section-5.2
      */
     public function getChanges($sinceState, $maxChanges = 1000, $accountId = null)
     {
