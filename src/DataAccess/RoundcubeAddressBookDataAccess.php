@@ -1,26 +1,31 @@
 <?php
+
 namespace OpenXPort\DataAccess;
 
 class RoundcubeAddressBookDataAccess extends AbstractDataAccess
 {
     private $db;
     private $userID;
-    private $logger;
 
     public function __construct()
     {
         $this->logger = \OpenXPort\Util\Logger::getInstance();
+
         $RCMAIL = \rcmail::get_instance(0, $GLOBALS['env']);
+
         $this->db = \rcube_db::factory(
             $RCMAIL->config->get('db_dsnw'),
             $RCMAIL->config->get('db_dsnr'),
             $RCMAIL->config->get('db_persistent')
         );
+
         $this->userID = $RCMAIL->user->ID;
     }
 
     public function getAll($accountId = null)
     {
+        $this->logger->info("Getting address books");
+
         $result = [];
         $query = $this->db->query(
             "SELECT contactgroup_id, name FROM contactgroups WHERE user_id = ? AND del = 0",
@@ -29,6 +34,9 @@ class RoundcubeAddressBookDataAccess extends AbstractDataAccess
         while ($row = $this->db->fetch_assoc($query)) {
             $result[$row['contactgroup_id']] = $row;
         }
+
+        $this->logger->info("Got " . sizeof($result) . " address books.");
+
         return $result;
     }
 
@@ -52,18 +60,29 @@ class RoundcubeAddressBookDataAccess extends AbstractDataAccess
 
     public function create($addressBooksToCreate, $accountId = null)
     {
-        $created = [];
-        foreach ($addressBooksToCreate as $creationId => $data) {
-            $name = isset($data['name']) ? $data['name'] : 'New Address Book';
-            $this->db->query(
-                "INSERT INTO contactgroups (user_id, name, changed) VALUES (?, ?, NOW())",
-                $this->userID,
-                $name
-            );
-            $newId = $this->db->insert_id();
-            $created[$creationId] = (string)$newId;
+        $this->logger->info("Creating " . sizeof($addressBooksToCreate) . " address books for user " . $accountId);
+
+        $addressBookMap = [];
+
+        foreach ($addressBooksToCreate as $ab) {
+            $addressBookToCreate = reset($ab);
+            $creationId = key($ab);
+
+            if (is_null($addressBookToCreate)) {
+                $addressBookMap[$creationId] = false;
+            } else {
+                $name = isset($addressBookToCreate['name']) ? $addressBookToCreate['name'] : 'New Address Book';
+                $this->db->query(
+                    "INSERT INTO contactgroups (user_id, name, changed) VALUES (?, ?, NOW())",
+                    $this->userID,
+                    $name
+                );
+                $newId = $this->db->insert_id();
+                $addressBookMap[$creationId] = (string)$newId;
+            }
         }
-        return $created;
+
+        return $addressBookMap;
     }
 
     public function update($addressBooksToUpdate, $accountId = null)
@@ -86,16 +105,16 @@ class RoundcubeAddressBookDataAccess extends AbstractDataAccess
 
     public function destroy($ids, $accountId = null)
     {
-        $destroyed = [];
+        $addressBookMap = [];
         foreach ($ids as $id) {
-            $this->db->query(
+            $res = $this->db->query(
                 "UPDATE contactgroups SET del = 1 WHERE contactgroup_id = ? AND user_id = ?",
                 $id,
                 $this->userID
             );
-            $destroyed[] = (string)$id;
+            $addressBookMap[$id] = ($res !== false);
         }
-        return $destroyed;
+        return $addressBookMap;
     }
 
     public function query($accountId = null, $filter = null)

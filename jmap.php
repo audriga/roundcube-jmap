@@ -59,7 +59,7 @@ $logger->notice("Running PHP v" . phpversion() . ", RC v" . RCMAIL_VERSION . ", 
 $accessors = array(
     "AddressBooks" => new \OpenXPort\DataAccess\RoundcubeAddressBookDataAccess(),
     "ContactCard" => new \OpenXPort\DataAccess\RoundcubeContactDataAccess(),
-    "Calendars" => null,
+    "Calendars" => new \OpenXPort\DataAccess\RoundcubeCalendarDataAccess(),
     "CalendarEvents" => new \OpenXPort\DataAccess\RoundcubeCalendarEventDataAccess(),
     "Tasks" => null,
     "Notes" => null,
@@ -93,7 +93,7 @@ $adapters = array(
 */
 $mappers = array(
     "AddressBooks" => new \OpenXPort\Mapper\RoundcubeAddressBookMapper(),
-    "Calendars" => null,
+    "Calendars" => new \OpenXPort\Mapper\RoundcubeCalendarMapper(),
     "CalendarEvents" => new \OpenXPort\Mapper\RoundcubeJSCalendarICalendarMapper(),
     "Tasks" => null,
     "Notes" => null,

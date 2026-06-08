@@ -78,12 +78,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/audriga/openxport-jmap.git",
-                "reference": "e54691b64741045e0c3d234e956b4653fb88ccc4"
+                "reference": "12910c1039f49b1391baba1d4c8e4d64915a0d6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/audriga/openxport-jmap/zipball/e54691b64741045e0c3d234e956b4653fb88ccc4",
-                "reference": "e54691b64741045e0c3d234e956b4653fb88ccc4",
+                "url": "https://api.github.com/repos/audriga/openxport-jmap/zipball/12910c1039f49b1391baba1d4c8e4d64915a0d6e",
+                "reference": "12910c1039f49b1391baba1d4c8e4d64915a0d6e",
                 "shasum": ""
             },
             "require": {
@@ -130,7 +130,7 @@
                 "source": "https://github.com/audriga/openxport-jmap/tree/7676-ietf-compatibility",
                 "issues": "https://github.com/audriga/openxport-jmap/issues"
             },
-            "time": "2026-06-02T07:25:39+00:00"
+            "time": "2026-06-03T16:45:32+00:00"
         },
         {
             "name": "psr/log",
@@ -2116,14 +2116,14 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "audriga/jmap-icalendar_vcard": 20,
-        "audriga/jmap-openxport": 20
+        "audriga/jmap-openxport": 20,
+        "audriga/jmap-icalendar_vcard": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.6.0"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
 }

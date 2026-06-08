@@ -1,4 +1,5 @@
 <?php
+
 namespace OpenXPort\Mapper;
 
 use OpenXPort\Jmap\JSContact\AddressBook;
@@ -23,10 +24,11 @@ class RoundcubeAddressBookMapper
     {
         $result = [];
         foreach ($data as $creationId => $addressBook) {
-            // Handle both array and object input
             $addressBook = is_object($addressBook) ? (array)$addressBook : $addressBook;
-            $result[$creationId] = [
-                'name' => isset($addressBook['name']) ? $addressBook['name'] : 'New Address Book'
+            $result[] = [
+                $creationId => [
+                    'name' => isset($addressBook['name']) ? $addressBook['name'] : 'New Address Book'
+                ]
             ];
         }
         return $result;

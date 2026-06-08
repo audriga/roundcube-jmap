@@ -61,7 +61,7 @@ class RoundcubeIdentityDataAccess extends AbstractDataAccess
         $destroyed = [];
         foreach ($ids as $id) {
             $this->account->delete_identity($id);
-            $destroyed[] = $id;
+            $destroyed[$id] = 1;
         }
         return $destroyed;
     }
