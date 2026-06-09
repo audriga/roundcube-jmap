@@ -38,15 +38,6 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
 
         $this->logger->info("Got " . sizeof($contacts->records) . " contacts.");
 
-        // Get default address book ID (first contactgroup for this user)
-        $abRow = $this->db->fetch_assoc(
-            $this->db->query(
-                "SELECT contactgroup_id FROM contactgroups WHERE user_id = ? AND del = 0 ORDER BY contactgroup_id ASC LIMIT 1",
-                $this->userID
-            )
-        );
-        $defaultAddressBookId = $abRow ? (string)$abRow['contactgroup_id'] : '1';
-
         // An array to hold the vCards of all contacts that we've read from Roundcube
         $result = [];
 
@@ -64,7 +55,7 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
                     $contactId
                 )
             );
-            $addressBookId = $groupRow ? (string)$groupRow['contactgroup_id'] : $defaultAddressBookId;
+            $addressBookId = $groupRow ? (string)$groupRow['contactgroup_id'] : null;
 
             // Read raw vCard directly from DB to preserve custom properties
             $row = $this->db->fetch_assoc(
@@ -84,15 +75,6 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
     {
         $result = [];
 
-        // Get default address book ID (first contactgroup for this user)
-        $abRow = $this->db->fetch_assoc(
-            $this->db->query(
-                "SELECT contactgroup_id FROM contactgroups WHERE user_id = ? AND del = 0 ORDER BY contactgroup_id ASC LIMIT 1",
-                $this->userID
-            )
-        );
-        $defaultAddressBookId = $abRow ? (string)$abRow['contactgroup_id'] : '1';
-
         foreach ($ids as $id) {
             $row = $this->db->fetch_assoc(
                 $this->db->query(
@@ -110,7 +92,7 @@ class RoundcubeContactDataAccess extends AbstractDataAccess
                         $row['contact_id']
                     )
                 );
-                $addressBookId = $groupRow ? (string)$groupRow['contactgroup_id'] : $defaultAddressBookId;
+                $addressBookId = $groupRow ? (string)$groupRow['contactgroup_id'] : null;
 
                 $result[$row['contact_id']] = [
                     'vCard' => $row['vcard'],
