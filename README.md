@@ -10,7 +10,7 @@ The following data types are currently supported by the JMAP Plugin for Roundcub
 * Signatures over the [JMAP for Mail](https://www.rfc-editor.org/rfc/rfc8621) protocol
 * Contacts over the JMAP for Contacts protocol ([RFC 9553](https://datatracker.ietf.org/doc/rfc9553/)/ [RFC 9610](https://datatracker.ietf.org/doc/rfc9610/))
 * Calendar Events over the [JMAP for Calendars](https://datatracker.ietf.org/doc/draft-ietf-jmap-calendars/) protocol
-* Calendars (address book equivalent) over the [JMAP for Calendars](https://datatracker.ietf.org/doc/draft-ietf-jmap-calendars/) protocol
+* Calendars over the [JMAP for Calendars](https://datatracker.ietf.org/doc/draft-ietf-jmap-calendars/) protocol
 
 This plugin allows Roundcube to function as an address book sync server. It makes use of the JMAP for Contacts protocol for that. JMAP for Contacts is a successor to [CardDAV](https://www.rfc-editor.org/rfc/rfc6352).
 
