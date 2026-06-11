@@ -5,10 +5,9 @@ The JMAP plugin for Roundcube provides [JMAP](https://jmap.io/) support for Roun
 
 The following data types are currently supported by the JMAP Plugin for Roundcube:
 
-The following data types are currently supported by the JMAP Plugin for Roundcube:
-
 * Signatures over the [JMAP for Mail](https://www.rfc-editor.org/rfc/rfc8621) protocol
 * Contacts over the JMAP for Contacts protocol ([RFC 9553](https://datatracker.ietf.org/doc/rfc9553/)/ [RFC 9610](https://datatracker.ietf.org/doc/rfc9610/))
+* Address Books over the [JMAP for Contacts](https://datatracker.ietf.org/doc/rfc9610/) protocol
 * Calendar Events over the [JMAP for Calendars](https://datatracker.ietf.org/doc/draft-ietf-jmap-calendars/) protocol
 * Calendars over the [JMAP for Calendars](https://datatracker.ietf.org/doc/draft-ietf-jmap-calendars/) protocol
 
@@ -49,5 +48,5 @@ Roundcube: 1.2, 1.3, 1.4 and 1.6
 For debugging purposes it makes sense to throw some cURL calls at the API. For example, this is how you tell the JMAP API to return all Contacts:
 
 ```
-curl <roundcube-address>plugins/jmap/jmap.php -u <username>:<password> -d '{"using":["https://www.audriga.eu/jmap/jscontact/"],"methodCalls":[["Card/get", {"accountId":"<username>"}, "0"]]}'
+curl <roundcube-address>plugins/jmap/jmap.php -u <username>:<password> -d '{"using":["urn:ietf:params:jmap:contacts"],"methodCalls":[["ContactCard/get", {"accountId":"<username>"}, "0"]]}'
 ```
