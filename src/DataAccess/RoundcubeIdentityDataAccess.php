@@ -29,7 +29,14 @@ class RoundcubeIdentityDataAccess extends AbstractDataAccess
 
     public function get($ids, $accountId = null)
     {
-        throw new BadMethodCallException("Get for specific IDs via Identity/get not implemented.");
+        $result = [];
+        foreach ($ids as $id) {
+            $identity = $this->account->get_identity($id);
+            if ($identity) {
+                $result[$id] = $identity;
+            }
+        }
+        return $result;
     }
 
     public function create($identitiesToCreate, $accountId = null)
@@ -51,13 +58,38 @@ class RoundcubeIdentityDataAccess extends AbstractDataAccess
     // Destroys specific entities
     public function destroy($ids, $accountId = null)
     {
-        throw new BadMethodCallException("Destroy via Identity/set not implemented.");
+        $destroyed = [];
+        foreach ($ids as $id) {
+            $this->account->delete_identity($id);
+            $destroyed[$id] = 1;
+        }
+        return $destroyed;
     }
 
     // Collects multiple ids
     // TODO support multiple FilterConditions like in JMAP standard
     public function query($accountId, $filter = null)
     {
-        throw new BadMethodCallException("Identity/query not implemented.");
+        $ids = [];
+        $identities = $this->account->list_identities();
+        foreach ($identities as $identity) {
+            $ids[] = (string)$identity['identity_id'];
+        }
+        return ['ids' => $ids];
+    }
+
+     /**
+     * Update identities
+     */
+    public function update($entitiesToUpdate, $accountId = null)
+    {
+        $updated = [];
+        foreach ($entitiesToUpdate as $id => $properties) {
+            // For now, delete and recreate
+            $this->account->delete_identity($id);
+            $created = $this->create($properties, $accountId);
+            $updated[$id] = $created;
+        }
+        return $updated;
     }
 }

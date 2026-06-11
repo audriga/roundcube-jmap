@@ -57,17 +57,15 @@ $logger->notice("Running PHP v" . phpversion() . ", RC v" . RCMAIL_VERSION . ", 
 
 // TODO Probably from here on only
 $accessors = array(
-    "Contacts" => null,
-    "Calendars" => null,
-    "CalendarEvents" => null,
+    "AddressBooks" => new \OpenXPort\DataAccess\RoundcubeAddressBookDataAccess(),
+    "ContactCard" => new \OpenXPort\DataAccess\RoundcubeContactDataAccess(),
+    "Calendars" => new \OpenXPort\DataAccess\RoundcubeCalendarDataAccess(),
+    "CalendarEvents" => new \OpenXPort\DataAccess\RoundcubeCalendarEventDataAccess(),
     "Tasks" => null,
     "Notes" => null,
     "Identities" => new \OpenXPort\DataAccess\RoundcubeIdentityDataAccess(),
     "Filters" => null,
     "StorageNodes" => null,
-    "ContactGroups" => null,
-    "Cards" => new \OpenXPort\DataAccess\RoundcubeContactDataAccess(),
-    "CardGroups" => new \OpenXPort\DataAccess\RoundcubeContactGroupDataAccess(),
 );
 
 /**
@@ -75,20 +73,18 @@ $accessors = array(
  * "null" means that no adapter class is present/available for the given data type
 */
 $adapters = array(
-    "Contacts" => null,
+    "AddressBooks" => null,
     "Calendars" => null,
-    "CalendarEvents" => null,
+    "CalendarEvents" => new \OpenXPort\Adapter\RoundcubeJSCalendarICalendarAdapter(),
     "Tasks" => null,
     "Notes" => null,
     "Identities" => new \OpenXPort\Adapter\RoundcubeIdentityAdapter(),
     "Filters" => null,
     "StorageNodes" => null,
-    "ContactGroups" => null,
-    "Cards" => new \OpenXPort\Adapter\RoundcubeJSContactVCardAdapter(
+    "ContactCard" => new \OpenXPort\Adapter\RoundcubeJSContactVCardAdapter(
         $oxpConfig['vCardParsing'],
         $oxpConfig['dumpInvalidVCards']
     ),
-    "CardGroups" => new \OpenXPort\Adapter\RoundcubeCardGroupAdapter()
 );
 
 /**
@@ -96,17 +92,15 @@ $adapters = array(
  * "null" means that no mapper class is present/available for the given data type
 */
 $mappers = array(
-    "Contacts" => null,
-    "Calendars" => null,
-    "CalendarEvents" => null,
+    "AddressBooks" => new \OpenXPort\Mapper\RoundcubeAddressBookMapper(),
+    "Calendars" => new \OpenXPort\Mapper\RoundcubeCalendarMapper(),
+    "CalendarEvents" => new \OpenXPort\Mapper\RoundcubeJSCalendarICalendarMapper(),
     "Tasks" => null,
     "Notes" => null,
     "Identities" => new \OpenXPort\Mapper\RoundcubeIdentityMapper(),
     "Filters" => null,
     "StorageNodes" => null,
-    "ContactGroups" => null,
-    "Cards" => new \OpenXPort\Mapper\RoundcubeJSContactVCardMapper(),
-    "CardGroups" => new \OpenXPort\Mapper\RoundcubeCardGroupMapper()
+    "ContactCard" => new \OpenXPort\Mapper\RoundcubeJSContactVCardMapper(),
 );
 
 $accountData = [
