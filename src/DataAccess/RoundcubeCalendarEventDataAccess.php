@@ -27,11 +27,15 @@ class RoundcubeCalendarEventDataAccess extends AbstractDataAccess
         $RCMAIL = \rcmail::get_instance(0, $GLOBALS['env']);
 
         // Load calendar plugin and its database driver
-        require_once '/var/www/html/plugins/calendar/drivers/calendar_driver.php';
-        require_once '/var/www/html/plugins/calendar/drivers/database/database_driver.php';
+        require_once RCUBE_PLUGINS_DIR . 'calendar/drivers/calendar_driver.php';
+        require_once RCUBE_PLUGINS_DIR . 'calendar/drivers/database/database_driver.php';
 
         $cal = $RCMAIL->plugins->get_plugin('calendar');
-        $this->driver = new \database_driver($cal);
+        if ($cal !== null && !empty($cal->rc)) {
+            $this->driver = new \database_driver($cal);
+        } else {
+            $this->logger->warning("Calendar plugin not available or not fully initialized");
+        }
 
         $this->db = $RCMAIL->get_dbh();
         $this->userID = $RCMAIL->user->ID;

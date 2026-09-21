@@ -4,6 +4,16 @@
 //  * removing authenticate hook logic using $_POST.
 //  * moving login logic to a function provided by base Roundcube
 
+// On FastCGI servers PHP_AUTH_* may be absent; recover from Authorization header via .htaccess RewriteRule
+if (empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
+    $auth = $_SERVER['HTTP_AUTHORIZATION'];
+    if (strncasecmp($auth, 'Basic ', 6) === 0) {
+        list($u, $p) = array_pad(explode(':', base64_decode(substr($auth, 6)), 2), 2, '');
+        $_SERVER['PHP_AUTH_USER'] = $u;
+        $_SERVER['PHP_AUTH_PW']   = $p;
+    }
+}
+
 // include environment
 require_once __DIR__ . '/../../program/include/iniset.php';
 

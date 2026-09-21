@@ -21,7 +21,7 @@ $oxpVersion = '1.4.0';
  * (lines 27, 47 and 48)
  */
 
-$_SERVER['SCRIPT_FILENAME'] = realpath(__DIR__ . '/../../index.php');
+$_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/../../index.php';
 
 /* START OF OPENXPORT Code only */
 // Use our composer autoload
