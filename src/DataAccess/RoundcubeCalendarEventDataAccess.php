@@ -51,7 +51,7 @@ class RoundcubeCalendarEventDataAccess extends AbstractDataAccess
         $result = [];
 
         $query = $this->db->query(
-            "SELECT e.* FROM events e
+            "SELECT e.*, e.calendar_id AS calendar FROM events e
             JOIN calendars c ON e.calendar_id = c.calendar_id
             WHERE c.user_id = ? AND e.recurrence_id = 0",
             $this->userID
