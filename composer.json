@@ -38,6 +38,6 @@
         }
     },
     "archive": {
-        "exclude": ["/tests", "/build", "/README.md"]
+        "exclude": ["tests", "Tests", "/build", "/.idea", "/.phpactor.json"]
     }
 }

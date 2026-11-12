@@ -1,0 +1,4 @@
+/tests export-ignore
+/build export-ignore
+/.idea export-ignore
+/.phpactor.json export-ignore

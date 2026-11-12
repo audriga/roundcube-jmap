@@ -1,6 +1,8 @@
 # Roundcube JMAP
 ⚠️  This version is still in its early stages. This API exposes user data. It is not recommended to expose this API to untrusted networks for now. Please consider contacting us before using this in production.
 
+**Security notice:** The `jmap.php` endpoint should be restricted to trusted IPs (e.g. via your webserver config) rather than exposed to the public internet, since it is still in early stages of hardening.
+
 The JMAP plugin for Roundcube provides [JMAP](https://jmap.io/) support for Roundcube by exposing a RESTful API Endpoint which speaks the JMAP Protocol.
 
 The following data types are currently supported by the JMAP Plugin for Roundcube:
